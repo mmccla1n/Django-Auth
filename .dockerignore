@@ -1,0 +1,35 @@
+# Python cache files and directories
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+test_4/
+test_4/bin/
+test_4/include/
+test_4/lib/
+
+# Docker-related files
+.git/
+.gitignore
+
+# Documentation and notes
+README.md
+dev_notes.txt
+db_schema.png
+tree_struct.txt
+
+# Local editor/IDE specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local test databases or logs
+*.sqlite3
+*.log
+*.env
+
+# Ignore compiled Python files
+*/__pycache__/
+*/migrations/*.py[cod]
