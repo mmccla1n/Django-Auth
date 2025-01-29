@@ -1,0 +1,35 @@
+# Python cache files and directories
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+test_4/
+test_4/bin/
+test_4/include/
+test_4/lib/
+
+# Local configuration and sensitive files
+*.env
+
+# SQLite database files
+*.sqlite3
+
+# Log files
+*.log
+
+# Editor/IDE specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker-related files
+docker-compose.override.yml
+
+# Ignoring migrations except __init__.py
+*/migrations/*.py[cod]
+!*/migrations/__init__.py
+
+# Exclude files
+tree_struct.txt
