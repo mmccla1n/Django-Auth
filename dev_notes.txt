@@ -1,12 +1,33 @@
 
+   - Following instrucitons from class readme to setup authentication 
 
-   
+   Reviewing Django authentican documentation
+    - https://docs.djangoproject.com/en/5.1/topics/auth/
+    - https://docs.djangoproject.com/en/5.1/ref/contrib/auth/
+
+
+    - Setting up user accounts:
+        - Peter Griffin, username = pgriffin, password = birdistheword
+
+
 
     Reminders:
     docker exec -it assessment-4-db-1 psql -h localhost -p 5432 -U postgres -d craig_db
 
     docker-compose down -v
     docker container prune
+    docker compose up -d --build 
+    docker exec -it django-auth-api-1 bash
+    docker exec -it django-auth-db-1 psql -h localhost 5432 -U postgres -d craig_db
+
+    - Commands to makemigrations and migrate within container
+        - docker-compose exec api python manage.py makemigrations
+        - docker-compose exec api python manage.py migrate
+
+    docker ps
+    CONTAINER ID   IMAGE             COMMAND                  CREATED          STATUS          PORTS                    NAMES
+    2a903474776a   django-auth-api   "python manage.py ru…"   15 seconds ago   Up 14 seconds   0.0.0.0:8001->8000/tcp   django-auth-api-1
+    645f6e980745   postgres:15       "docker-entrypoint.s…"   15 seconds ago   Up 14 seconds   0.0.0.0:5454->5432/tcp   django-auth-db-1
 
     Endpoints:
     List view of all the categories, post request available as well = http://localhost:8000/api/v1/categories/
@@ -22,6 +43,12 @@
     View single user = http://localhost:8000/api/v1/users/<user_id_int>/
 
      http://127.0.0.1:8000/api/v1/users/
+
+    User signup = http://localhost:8001/user_accounts/signup
+    Tradetoken = http://localhost:8001/user_accounts/get-token
+
+
+    Access webseever to see endpoint = http://localhost:8001
 
        - Sumit request via curl 
         curl -X POST http://localhost:8001/api/v1/categories/ \
@@ -66,3 +93,6 @@
 {
         "post": "Bird Bird Bird, Bird Is The Word"
     }
+
+
+    http://localhost:8001/user_accounts/get-token username=pgriffin password=birdistheword
