@@ -1,3 +1,7 @@
+IMPT NOTE!!
+    A token needs to be acquired to access resources
+
+
 To build container, execute cmd: 
     docker compose up -d --build
 
@@ -20,3 +24,6 @@ Following Resources are available:
     Detail view of a specific category. update and delete = http://localhost:8001/api/v1/categories/<post_id_int>     
     List view of all the posts for a given category, post =  http://localhost:8001/api/v1/categories/<category_id_int>/posts
     Detail view of a specific post in a specific category, update = http://localhost:8001/api/v1/categories/<category_id_int>/posts/<post_id_int>
+
+To access via CURL:
+    curl -H "Authorization: Token <token>>" <endpoint>
