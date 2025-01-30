@@ -9,6 +9,91 @@
     - Setting up user accounts:
         - Peter Griffin, username = pgriffin, password = birdistheword
 
+    - Learning how to submit a POST request for get-token without using a custom post operation, via browser.
+        - will have to use curl or postman
+            - Going with Postman
+                - initial request failed, error 404:
+                    {
+                        "non_field_errors": [
+                            "Unable to log in with provided credentials."
+                        ]
+                    } 
+                    - researching why.. 
+                        - Discussing issue with chatGpt 
+                        - checking if User pgriffin exist
+                            python manage.py shell
+                            (InteractiveConsole)
+                            >>> from django.contrib.auth.models import User
+                            >>> print(User.objects.all())
+                            <QuerySet [<User: pgriffin>]>
+
+                        - checking authentication:
+                            >>> from django.contrib.auth import authenticate
+                            >>> user = authenticate(username="pgriffin", password="birdistheword")
+                            >>> print(user)
+                            None
+                            >>> 
+
+                        - checking if password is saved for user
+                            user = User.objects.get(username="pgriffin")
+                            >>> print(user.password)
+                            birdistheword
+                            >>> 
+
+                            - Django documentation states the following, regarding passwords:
+                                password Required. A hash of, and metadata about, the password. (Django doesn’t store the raw password.) 
+                                Raw passwords can be arbitrarily long and can contain any character. The metadata in this field may mark 
+                                the password as unusable.
+
+                            - The username and password were created using DRF HTML form. IT did not hash the password 
+                                - will need to use set_password() to make it become hashable
+                                - reviewing Manager Methods..create_user, link https://docs.djangoproject.com/en/5.1/ref/contrib/auth/
+                                    - create_user, creates and saves a user, so the password will need to be hashed before creating
+                                - reviewing set_password() documentation
+                                    Sets the user’s password to the given raw string, taking care of the password hashing. Doesn’t save the User object.
+                                - Found doucmentation reagrding this matter, yet the serializer has fields set to '__all__'..
+                                    https://github.com/encode/django-rest-framework/issues/6737
+
+                                - Researching..How to hash password in Django Rest framework
+                                    Django Rest Framework doesn't handle password hashing directly, but it leverages Django's built-in authentication system, which does. Here's how you can hash a password in Django Rest Framework:
+                                    1. Use Django's make_password function:
+                                    Python
+
+                                    from django.contrib.auth.hashers import make_password
+
+                                    password = "my_secret_password"
+                                    hashed_password = make_password(password)
+                                    2. Use the set_password method on a user object:
+                                    This is the recommended method when working with Django's built-in user model.
+                                    Python
+
+                                    from django.contrib.auth.models import User
+
+                                    user = User.objects.create(username="myuser")
+                                    user.set_password("my_secret_password")
+                                    user.save()
+
+                            - For now going with option 2, also DRF documentation for changing passwords has the following(https://docs.djangoproject.com/en/5.1/topics/auth/default/)
+                                You can also change a password programmatically, using set_password():
+
+                                >>> from django.contrib.auth.models import User
+                                >>> u = User.objects.get(username="john")
+                                >>> u.set_password("new password")
+                                >>> u.save()
+
+                - Stepping thru class lecture video, I may have missed something.
+                    - 1st observation. accounts app is not included in the list of INSTALLED_APPS..will remove from my code
+
+                - Reviewing the following link https://medium.com/@lakshminp/drf-object-creation-methods-60476bb9783e
+                - Root cause of failure of getting a token, was not using DRF method 'perform_create'.
+                    - I named the method 'create_user'.
+                    - After naming to 'perform_create', am able to get a token
+
+               
+
+
+                            
+
 
 
     Reminders:
@@ -24,28 +109,37 @@
         - docker-compose exec api python manage.py makemigrations
         - docker-compose exec api python manage.py migrate
 
+    - Command to connect to db
+        - docker-compose exec db psql -U postgres -d craig_db
+
     docker ps
     CONTAINER ID   IMAGE             COMMAND                  CREATED          STATUS          PORTS                    NAMES
     2a903474776a   django-auth-api   "python manage.py ru…"   15 seconds ago   Up 14 seconds   0.0.0.0:8001->8000/tcp   django-auth-api-1
     645f6e980745   postgres:15       "docker-entrypoint.s…"   15 seconds ago   Up 14 seconds   0.0.0.0:5454->5432/tcp   django-auth-db-1
 
     Endpoints:
-    List view of all the categories, post request available as well = http://localhost:8000/api/v1/categories/
-    Detail view of a specific category. update and delete = http://localhost:8000/api/v1/categories/<post_id_int> 
-   
-    List view of all the posts for a given category, post =  http://localhost:8000/api/v1/categories/<category_id_int>/posts
+    Before change to 8001:
+        List view of all the categories, post request available as well = http://localhost:8000/api/v1/categories/
+        Detail view of a specific category. update and delete = http://localhost:8000/api/v1/categories/<post_id_int> 
+    
+        List view of all the posts for a given category, post =  http://localhost:8000/api/v1/categories/<category_id_int>/posts
 
-    Detail view of a specific post in a specific category, update = http://localhost:8000/api/v1/categories/<category_id_int>/posts/<post_id_int>
+        Detail view of a specific post in a specific category, update = http://localhost:8000/api/v1/categories/<category_id_int>/posts/<post_id_int>
 
-    View all posts = http://localhost:8000/api/v1/posts/
-  
-    View all users = http://localhost:8000/api/v1/users/
-    View single user = http://localhost:8000/api/v1/users/<user_id_int>/
+        View all posts = http://localhost:8000/api/v1/posts/
+    
+        View all users = http://localhost:8000/api/v1/users/
+        View single user = http://localhost:8000/api/v1/users/<user_id_int>/
 
-     http://127.0.0.1:8000/api/v1/users/
+        http://127.0.0.1:8000/api/v1/users/
+
+    After change to 8001:
 
     User signup = http://localhost:8001/user_accounts/signup
     Tradetoken = http://localhost:8001/user_accounts/get-token
+    View all posts = http://localhost:8001/api/v1/posts/
+    View all users = http://localhost:8001/api/v1/users/
+    View single user = http://localhost:8001/api/v1/users/<user_id_int>/
 
 
     Access webseever to see endpoint = http://localhost:8001
@@ -95,4 +189,5 @@
     }
 
 
-    http://localhost:8001/user_accounts/get-token username=pgriffin password=birdistheword
+    from django.contrib.auth.models import User
+>>> User.objects.filter(username="pgriffin").delete()

@@ -10,11 +10,12 @@ class UserSignUp(CreateAPIView):
     serializer_class = SignUpSerializer
     permission_classes = [AllowAny]
 
-    def create_user(self, serilized_data):
+    #def create_user(self, serilized_data):
+    def perform_create(self, serilized_data):
 
         # Check if serilized_data is valid
         if serilized_data.is_valid():
             user_name = serilized_data.validated_data['username']
-            pw = user_name = serilized_data.validated_data['password']
+            pw = serilized_data.validated_data['password']
             User.objects.create_user(username=user_name, password=pw)
 
