@@ -89,6 +89,11 @@
                     - I named the method 'create_user'.
                     - After naming to 'perform_create', am able to get a token
 
+
+    - Reviewing documentation for middleware
+    - Created middleware.py file at project level
+    
+
                
 
 

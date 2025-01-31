@@ -1,0 +1,41 @@
+
+<!DOCTYPE html> <!-- Define document type -->
+<!-- Root of document, specifing language content -->
+<html lang="en">
+    <!-- Head of document-->
+    <head>
+        <meta charset="UTF-8"> <!--lan processing, allowing the document to understand chaacters-->
+        <meta name="viewport"> <!-- name of metadata to be targeted for content display -->
+        <!--Match wifth of device and set intital zoom level-->
+        <meta content="width=device-width, initial-scale=1.0">
+        <title>Craiglist Project</title> <!--Title webpage tab will have-->
+        <link rel="stylesheet" href="styles.css"> <!-- Select css file to use for styling-->
+        <!-- JS file to use and to load the script asynchronously-->
+        <script src="app.js" async></script>
+    </head>
+    <body>
+        <h1>My Craiglist Project</h1>
+  <div id="root"></div>
+
+  <h3 id="getinfo">Get Info</h3>
+
+  <h2>Log In/Sign Up</h2>
+  <form id="form">
+
+    <div>
+      <input type="checkbox" id="signup" name="signup">
+      <label for="signup">Signup</label>
+    </div>
+
+    <label for="uname">Username:</label><br>
+    <input type="text" id="uname" name="uname"><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password"><br><br>
+    <input type="submit" value="Submit">
+  </form> 
+
+  <input id="logout-btn" type="submit" value="Log Out">
+
+
+    </body>
+</html>
